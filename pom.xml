@@ -19,6 +19,8 @@
     <modules>
         <module>zoom-tools</module>
         <module>zoom-security</module>
+        <module>zoom-meta</module>
+        <module>zoom-demo</module>
     </modules>
 
     <properties>

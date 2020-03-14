@@ -1,13 +1,13 @@
-package com.example.demo;
+package demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class DemoApplication {
+@SpringBootApplication(scanBasePackages = {"demo", "com.zoom.meta"})
+public class MetaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(MetaApplication.class, args);
     }
 
 }
