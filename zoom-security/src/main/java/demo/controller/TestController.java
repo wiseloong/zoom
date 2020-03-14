@@ -13,4 +13,9 @@ public class TestController {
         return "abc";
     }
 
+    @GetMapping("/bcd")
+    public String bcd() {
+        return "bcd";
+    }
+
 }
