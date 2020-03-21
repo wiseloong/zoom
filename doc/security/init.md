@@ -10,9 +10,9 @@
 
 ## 表
 
-用户表：cm_person；角色表： sm_role；权限表：sm_permission；
+用户表：cm_person；角色表： sm_role；权限表：sm_permission；资源表：sm_resource；
 
-关系表：sr_person_role，sr_role_permission；
+关系表：sr_person_role，sr_role_permission，sr_permission_resource；
 
 组织机构：cm_orgnization；用户组织关系（不急）；角色组织关系表：（数据权限）
 
