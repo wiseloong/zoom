@@ -5,21 +5,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/")
 public class TestController {
 
-    @GetMapping("/abc")
-    public String abc() {
+    @GetMapping("/exc")
+    public String exc() {
         Object a = null;
         Assert.state(null == a, "测试一个错误！");
-        return "abc";
+        return "测试断言错误！";
     }
 
-    @GetMapping("/bcd")
-    public String bcd() {
-        Object a = null;
-        Assert.notNull(a);
-        return "bcd";
+    @GetMapping("/setS")
+    public String setSession(HttpSession session) {
+        session.setAttribute("user", "javaboy");
+        return "设置session成功！";
     }
+
+    @GetMapping("/getS")
+    public String getSession(HttpSession session) {
+        return (String) session.getAttribute("user");
+    }
+
 }
