@@ -1,4 +1,4 @@
-package demo.controller;
+package demo.tools.controller;
 
 import com.zoom.tools.api.Assert;
 import org.springframework.web.bind.annotation.GetMapping;

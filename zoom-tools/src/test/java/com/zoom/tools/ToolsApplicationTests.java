@@ -1,6 +1,6 @@
 package com.zoom.tools;
 
-import demo.ToolsApplication;
+import demo.tools.ToolsApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
