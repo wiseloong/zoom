@@ -1,10 +1,11 @@
 package demo.tools.config;
 
+import com.zaxxer.hikari.HikariDataSource;
 import com.zoom.tools.jdbc.DynamicDataSource;
 import com.zoom.tools.jdbc.DynamicDataSourceContextHolder;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -19,30 +20,47 @@ import java.util.Map;
 @Configuration
 public class DynamicDataSourceConfig {
 
-    /**
-     * 主数据源，需要@Primary注解
-     */
     @Bean
     @Primary
-    @ConfigurationProperties("spring.datasource.primary")
-    public DataSource primaryDataSource() {
-        return DataSourceBuilder.create().build();
+    @ConfigurationProperties("spring.datasource")
+    public DataSourceProperties dataSourceProperties() {
+        return new DataSourceProperties();
     }
 
-    /**
-     * 从数据源，可配置多个
-     */
     @Bean
+    @Primary
+    @ConfigurationProperties("spring.datasource.hikari")
+    public DataSource dataSource(@Qualifier("dataSourceProperties") DataSourceProperties properties) {
+        return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+    }
+
+    @Bean
+    @ConfigurationProperties("spring.datasource.slave")
+    public DataSourceProperties slaveDataSourceProperties() {
+        return new DataSourceProperties();
+    }
+
+    @Bean
+    @ConfigurationProperties("spring.datasource.slave.hikari")
+    public DataSource slaveDataSource(@Qualifier("slaveDataSourceProperties") DataSourceProperties properties) {
+        return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+    }
+
+    // 这种配置使用 HikariDataSource 时，application.yml里不能使用url，需要使用jdbc-url
+    /*@Bean
     @ConfigurationProperties("spring.datasource.slave")
     public DataSource slaveDataSource() {
         return DataSourceBuilder.create().build();
-    }
+    }*/
 
+    /**
+     * 多数据源配置，primary代表默认主数据源
+     */
     @Bean
-    public DynamicDataSource myDataSource(@Qualifier("primaryDataSource") DataSource primaryDataSource,
+    public DynamicDataSource myDataSource(@Qualifier("dataSource") DataSource dataSource,
                                           @Qualifier("slaveDataSource") DataSource slaveDataSource) {
         Map<Object, Object> targetDataSources = new HashMap<>();
-        targetDataSources.put("primary", primaryDataSource);
+        targetDataSources.put("primary", dataSource);
         targetDataSources.put("slave", slaveDataSource);
         return DynamicDataSourceContextHolder.dynamicDataSource(targetDataSources, "primary");
     }
