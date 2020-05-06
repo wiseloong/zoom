@@ -3,7 +3,6 @@ package demo.tools.config;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zoom.tools.jdbc.DynamicDataSource;
 import com.zoom.tools.jdbc.DynamicDataSourceContextHolder;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,8 +29,8 @@ public class DynamicDataSourceConfig {
     @Bean
     @Primary
     @ConfigurationProperties("spring.datasource.hikari")
-    public DataSource dataSource(@Qualifier("dataSourceProperties") DataSourceProperties properties) {
-        return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+    public DataSource dataSource() {
+        return dataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }
 
     @Bean
@@ -42,8 +41,8 @@ public class DynamicDataSourceConfig {
 
     @Bean
     @ConfigurationProperties("spring.datasource.slave.hikari")
-    public DataSource slaveDataSource(@Qualifier("slaveDataSourceProperties") DataSourceProperties properties) {
-        return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+    public DataSource slaveDataSource() {
+        return slaveDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }
 
     // 这种配置使用 HikariDataSource 时，application.yml里不能使用url，需要使用jdbc-url
@@ -57,11 +56,10 @@ public class DynamicDataSourceConfig {
      * 多数据源配置，primary代表默认主数据源
      */
     @Bean
-    public DynamicDataSource myDataSource(@Qualifier("dataSource") DataSource dataSource,
-                                          @Qualifier("slaveDataSource") DataSource slaveDataSource) {
+    public DynamicDataSource myDataSource() {
         Map<Object, Object> targetDataSources = new HashMap<>();
-        targetDataSources.put("primary", dataSource);
-        targetDataSources.put("slave", slaveDataSource);
+        targetDataSources.put("primary", dataSource());
+        targetDataSources.put("slave", slaveDataSource());
         return DynamicDataSourceContextHolder.dynamicDataSource(targetDataSources, "primary");
     }
 
