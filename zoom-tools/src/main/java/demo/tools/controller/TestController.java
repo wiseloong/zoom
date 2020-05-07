@@ -1,7 +1,7 @@
 package demo.tools.controller;
 
 import com.zoom.tools.api.Assert;
-import com.zoom.tools.jdbc.JdbcUtils;
+import com.zoom.tools.jdbc.JdbcCurdUtils;
 import com.zoom.tools.jdbc.TargetDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -39,13 +42,20 @@ public class TestController {
     public void abc() {
 //        Map<String, Object> a = jdbcTemplate.queryForMap("select  * from cm_person where id =1");
 //        System.out.println(a);
-        JdbcUtils.getById("a", 1L);
+        JdbcCurdUtils.findById("a", 1L);
     }
 
     @TargetDataSource("slave")
     public void bcd() {
 //        Map<String, Object> a = jdbcTemplate.queryForMap("select  * from sm_role where id =1");
 //        System.out.println(a);
-        JdbcUtils.getById("a", 1L);
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", "ssss23");
+        map.put("name", "iiii23");
+        map.put("create_date", new Date());
+//        map.put("id",1L);
+//        JdbcCurdUtils.updateById("sm_role", map);
+        long a = JdbcCurdUtils.insert("sm_role", map);
+        System.out.println(a);
     }
 }

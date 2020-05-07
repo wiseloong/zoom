@@ -14,7 +14,9 @@ class ToolsApplicationTests {
 
     @Test
     void contextLoads() {
-        testController.abc();
+//        testController.abc();
+//        testController.bcd();
+//        testController.abc();
         testController.bcd();
     }
 

@@ -36,7 +36,7 @@ public class DynamicDataSourceContextHolder {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         dynamicDataSource.setDefaultTargetDataSource(defaultTargetDataSource);
         dynamicDataSource.setTargetDataSources(targetDataSources);
-        JdbcUtils.getInstance(dynamicDataSource);
+        JdbcCurdUtils.getInstance(dynamicDataSource);
         return dynamicDataSource;
     }
 }
