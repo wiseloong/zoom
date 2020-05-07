@@ -2,14 +2,25 @@ server:
   port: 9000
 
 spring:
+  profiles:
+    active: dev
+
   datasource:
     url: jdbc:mysql://localhost:3306/zoom
     username: zoom
     password: zoom
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   flyway:
-    enabled: true
+    enabled: false
+
 
 zoom:
   security:
     db-init: false  # 开发阶段可以使用默认配置，打包发布时合并sql语句，支持启用这个参数
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

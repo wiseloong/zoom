@@ -1,6 +1,6 @@
 package com.zoom.meta;
 
-import demo.MetaApplication;
+import demo.meta.MetaApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

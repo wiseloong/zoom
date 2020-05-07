@@ -1,14 +1,13 @@
 package com.zoom.security.rest;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.util.Collections;
-import java.util.Map;
 
 @RestController
-//@RequestMapping("/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     /**
@@ -24,22 +23,6 @@ public class AuthController {
     @GetMapping("/user")
     public Principal user(Principal user) {
         return user;
-    }
-
-//    @PostMapping("/login")
-//    public String login() {
-//        return "asda";
-//    }
-
-    @GetMapping("/token")
-    public Map<String, String> token(HttpSession session) {
-        return Collections.singletonMap("token", session.getId());
-    }
-
-    @RequestMapping("/")
-    @CrossOrigin(origins = "*", maxAge = 3600, allowedHeaders = {"x-auth-token", "x-requested-with", "x-xsrf-token"})
-    public String home() {
-        return "Hello World";
     }
 
 }

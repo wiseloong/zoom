@@ -1,6 +1,6 @@
 package com.zoom.security;
 
-import demo.SecurityApplication;
+import demo.security.SecurityApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
