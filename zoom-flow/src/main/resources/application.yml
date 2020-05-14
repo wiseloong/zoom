@@ -1,0 +1,28 @@
+server:
+  port: 8090
+  servlet:
+    context-path: /flowable-rest
+
+spring:
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/flowable?useSSL=false&serverTimezone=PRC
+    username: flowable
+    password: flowable
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+#flowable:
+#  rest-api-enabled: true
+flowable:
+  process:
+    servlet:
+      path: /service
+

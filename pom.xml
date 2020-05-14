@@ -20,6 +20,7 @@
         <module>zoom-tools</module>
         <module>zoom-security</module>
         <module>zoom-meta</module>
+        <module>zoom-flow</module>
         <module>zoom-demo</module>
     </modules>
 
