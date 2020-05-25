@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BaseMeta extends BaseEntity {
-    private Long classId;       //规格id
-    private String classCode;   //规格编码
+public abstract class BaseMeta extends BaseEntity {
+    protected Long classId;       //规格id
+    protected String classCode;   //规格编码
 }

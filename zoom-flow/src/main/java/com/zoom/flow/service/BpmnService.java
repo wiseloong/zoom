@@ -10,6 +10,7 @@ import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.DeploymentBuilder;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.Task;
 import org.flowable.validation.ProcessValidator;
@@ -40,9 +41,9 @@ public class BpmnService {
     /**
      * 创建一个流程模型
      *
-     * @param process 流程
+     * @param process 流程定义
      */
-    public BpmnModel startBpmn(Process process) {
+    public BpmnModel newBpmn(Process process) {
         BpmnModel bpmnModel = new BpmnModel();
         bpmnModel.addProcess(process);
         return bpmnModel;
@@ -62,30 +63,66 @@ public class BpmnService {
     }
 
     /**
+     * 给流程定义里的元素节点添加去向线，应对流程检查和创建图形
+     */
+    public void outgoingFlows(Process process) {
+        createProcessIdUnique(process).outgoingFlows();
+    }
+
+    /**
+     * 给流程定义自动布局
+     */
+    public void autoLayout(BpmnModel bpmnModel) {
+        new BpmnAutoLayout(bpmnModel).execute();
+    }
+
+    /**
      * 发布流程
      *
-     * @param processId 流程id
      * @param bpmnModel 流程模型
      * @return 发布结果
      */
-    public Deployment deploy(String processId, BpmnModel bpmnModel) {
-        validate(bpmnModel);
-        final String fileName = "flow_" + processId + "_bpmn20.xml";
-        new BpmnAutoLayout(bpmnModel).execute();
+    public Deployment deploy(BpmnModel bpmnModel) {
+        Process p = bpmnModel.getMainProcess();
+        String processKey = p.getId();
+        String fileName = "flow_" + processKey + ".bpmn";
         DeploymentBuilder deploymentBuilder = repositoryService.createDeployment()
-                .addBpmnModel(fileName, bpmnModel);
+                .addBpmnModel(fileName, bpmnModel).key(processKey).name(p.getName());
         return deploymentBuilder.deploy();
     }
 
     /**
      * 发布流程
      *
-     * @param process 流程对象
+     * @param process 流程定义
      * @return 发布结果
      */
     public Deployment deploy(Process process) {
-        String id = process.getId();
-        return deploy(id, startBpmn(process));
+        BpmnModel bpmnModel = newBpmn(process);
+        return deploy(bpmnModel);
+    }
+
+    /**
+     * 根据流程标识，获取最新的流程定义id
+     *
+     * @param processDefinitionKey 流程标识
+     * @return 流程定义id
+     */
+    public String getProcessDefinitionId(String processDefinitionKey) {
+        ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionKey(processDefinitionKey).latestVersion().singleResult();
+        return pd.getId();
+    }
+
+    /**
+     * 根据流程标识，获取流程模型
+     *
+     * @param processDefinitionKey 流程标识
+     * @return 流程模型
+     */
+    public BpmnModel findBpmnModel(String processDefinitionKey) {
+        String id = getProcessDefinitionId(processDefinitionKey);
+        return repositoryService.getBpmnModel(id);
     }
 
     /**
@@ -114,8 +151,16 @@ public class BpmnService {
         return new ProcessIdUniqueBuilder(id, name);
     }
 
+    public ProcessIdUniqueBuilder createProcessIdUnique(Process process) {
+        return new ProcessIdUniqueBuilder(process);
+    }
+
     public ProcessNameUniqueBuilder createProcessNameUnique(String id, String name) {
         return new ProcessNameUniqueBuilder(id, name, idGenerator);
+    }
+
+    public ProcessNameUniqueBuilder createProcessNameUnique(Process process) {
+        return new ProcessNameUniqueBuilder(process, idGenerator);
     }
 
 }

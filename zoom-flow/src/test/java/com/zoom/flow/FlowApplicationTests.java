@@ -1,10 +1,15 @@
 package com.zoom.flow;
 
+import com.zoom.flow.entity.AbstractModel;
+import com.zoom.flow.repository.ModelMapper;
 import com.zoom.flow.service.BpmnService;
+import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.Process;
 import org.flowable.engine.IdentityService;
+import org.flowable.engine.RepositoryService;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.task.api.Task;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +28,10 @@ class FlowApplicationTests {
     TaskService taskService;
     @Autowired
     IdentityService identityService;
+    @Autowired
+    RepositoryService repositoryService;
+    @Autowired
+    ModelMapper modelMapper;
 
     @Test
     void newIdFlow() {
@@ -76,6 +85,29 @@ class FlowApplicationTests {
 //            taskService.complete(tasks.get(i).getId());
         }
 
+    }
+
+    @Test
+    void sss() {
+        ProcessDefinition a = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionKey("qingjia").latestVersion().singleResult();
+        String id = a.getId();
+        BpmnModel b = repositoryService.getBpmnModel(id);
+        System.out.println(b.toString());
+    }
+
+    @Test
+    void saveModel() {
+        AbstractModel model = new AbstractModel();
+        model.setId("asda");
+        modelMapper.insert(model);
+        System.out.println(model.toString());
+    }
+
+    @Test
+    void getModel() {
+        List<AbstractModel> list = modelMapper.findByKeyAndType("aaaaaaa", 0);
+        System.out.println(list.toString());
     }
 
 }

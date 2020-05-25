@@ -1,6 +1,9 @@
 package com.zoom.flow.service;
 
+import com.zoom.flow.util.FlowElementGenerator;
 import lombok.extern.slf4j.Slf4j;
+import org.flowable.bpmn.model.EndEvent;
+import org.flowable.bpmn.model.Process;
 import org.flowable.bpmn.model.ServiceTask;
 import org.flowable.bpmn.model.UserTask;
 
@@ -15,11 +18,15 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
         super(id, name);
     }
 
+    public ProcessIdUniqueBuilder(Process p) {
+        super(p);
+    }
+
     /**
      * 创建一个开始节点，并放到流程对象里
      */
     public ProcessIdUniqueBuilder startEvent() {
-        super.newStartEvent();
+        super.startEvent();
         return this;
     }
 
@@ -29,7 +36,7 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
      * @param name 启动用户节点中文名称
      */
     public ProcessIdUniqueBuilder startUserTask(String name) {
-        super.newStartUserTask(name);
+        super.startUserTask(name);
         return this;
     }
 
@@ -37,7 +44,7 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
      * 创建一个结束节点，并放到流程对象里，针对单个结束节点流程
      */
     public ProcessIdUniqueBuilder endEvent() {
-        super.newEndEvent();
+        super.endEvent();
         return this;
     }
 
@@ -47,7 +54,8 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
      * @param id 结束节点id
      */
     public ProcessIdUniqueBuilder endEvent(String id) {
-        super.newEndEvent(id, END_EVENT);
+        EndEvent element = FlowElementGenerator.endEvent(id);
+        process.addFlowElement(element);
         return this;
     }
 
@@ -69,13 +77,15 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
      * @param user 用户节点指定用户
      */
     public ProcessIdUniqueBuilder userTask(String id, String name, String user) {
-        UserTask element = super.newUserTask(id, name);
+        UserTask element = FlowElementGenerator.userTask(id, name);
         element.setAssignee(user);
+        process.addFlowElement(element);
         return this;
     }
 
     public ProcessIdUniqueBuilder serviceTask(String id, String name) {
-        ServiceTask element = super.newServiceTask(id, name);
+        ServiceTask element = FlowElementGenerator.serviceTask(id, name);
+        process.addFlowElement(element);
         return this;
     }
 
@@ -85,7 +95,7 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
      * @param sourceId 与结束节点连接的节点id
      */
     public ProcessIdUniqueBuilder endSequenceFlow(String sourceId) {
-        return sequenceFlow(sourceId, END_EVENT);
+        return sequenceFlow(sourceId, FlowElementGenerator.END_EVENT);
     }
 
     /**
@@ -95,7 +105,7 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
      * @param targetId 结束端id
      */
     public ProcessIdUniqueBuilder sequenceFlow(String sourceId, String targetId) {
-        newSequenceFlow(sourceId, targetId);
+        super.sequenceFlow(sourceId, targetId);
         return this;
     }
 
@@ -107,7 +117,7 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
      * @param conditionExpression 判断逻辑
      */
     public ProcessIdUniqueBuilder sequenceFlow(String sourceId, String targetId, String conditionExpression) {
-        newSequenceFlow(sourceId, targetId, conditionExpression);
+        super.sequenceFlow(sourceId, targetId, conditionExpression);
         return this;
     }
 
@@ -118,8 +128,8 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
      * @return 流程对象
      */
     public ProcessIdUniqueBuilder start(String startTaskId) {
-        super.newStartEvent();
-        return sequenceFlow(START_EVENT, startTaskId);
+        startEvent();
+        return sequenceFlow(FlowElementGenerator.START_EVENT, startTaskId);
     }
 
     /**
@@ -130,9 +140,9 @@ public class ProcessIdUniqueBuilder extends ProcessBuilder implements Serializab
      * @return 流程对象
      */
     public ProcessIdUniqueBuilder startUser(String startUserTaskName, String startElementId) {
-        super.newStartEvent();
-        super.newStartUserTask(startUserTaskName);
-        return sequenceFlow(START_USER_TASK, startElementId);
+        startEvent();
+        startUserTask(startUserTaskName);
+        return sequenceFlow(FlowElementGenerator.START_USER_TASK, startElementId);
     }
 
     public ProcessIdUniqueBuilder endBuild() {

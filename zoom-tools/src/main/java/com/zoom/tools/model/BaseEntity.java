@@ -11,21 +11,21 @@ import java.util.Date;
  */
 @Getter
 @Setter
-public class BaseEntity implements Serializable {
+public abstract class BaseEntity implements Serializable {
 
-    private Long id;
-    private String code;
-    private String name;
-    private String notes;
-    private Integer version;
-    private Integer delete; //是否删除
-    private Integer valid;  //是否启用
-    private Long tenantId;  //租户id
+    protected Long id;
+    protected String code;
+    protected String name;
+    protected String notes;
+    protected Integer version;
+    protected Integer delete; //是否删除
+    protected Integer valid;  //是否启用
+    protected Long tenantId;  //租户id
 
-    private Long creatorId;
-    private Date createDate;
-    private Long modifierId;
-    private Date modifyDate;
+    protected Long creatorId;
+    protected Date createDate;
+    protected Long modifierId;
+    protected Date modifyDate;
 
     public void create(Long userId) {
         this.creatorId = userId;
