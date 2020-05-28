@@ -18,8 +18,8 @@ public abstract class BaseEntity implements Serializable {
     protected String name;
     protected String notes;
     protected Integer version;
-    protected Integer delete; //是否删除
     protected Integer valid;  //是否启用
+    protected Integer delete; //是否删除
     protected Long tenantId;  //租户id
 
     protected Long creatorId;
@@ -28,14 +28,33 @@ public abstract class BaseEntity implements Serializable {
     protected Date modifyDate;
 
     public void create(Long userId) {
+        Date date = new Date();
         this.creatorId = userId;
-        this.createDate = new Date();
         this.modifierId = userId;
-        this.modifyDate = new Date();
+        if (createDate == null) {
+            this.createDate = date;
+        }
+        if (modifyDate == null) {
+            this.modifyDate = date;
+        }
+        if (valid == null) {
+            this.valid = 1;
+        }
+        if (delete == null) {
+            this.delete = 0;
+        }
+        if (version == null) {
+            this.version = 1;
+        }
     }
 
     public void update(Long userId) {
+        this.creatorId = null;
+        this.createDate = null;
         this.modifierId = userId;
         this.modifyDate = new Date();
+        if (version != null) {
+            this.version++;
+        }
     }
 }

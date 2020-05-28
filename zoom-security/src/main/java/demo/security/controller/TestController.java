@@ -1,6 +1,6 @@
 package demo.security.controller;
 
-import com.zoom.security.CurrentUser;
+import com.zoom.security.annotation.CurrentUser;
 import org.springframework.security.crypto.encrypt.BytesEncryptor;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.web.csrf.CsrfToken;

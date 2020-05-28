@@ -1,4 +1,4 @@
-package com.zoom.security;
+package com.zoom.security.annotation;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

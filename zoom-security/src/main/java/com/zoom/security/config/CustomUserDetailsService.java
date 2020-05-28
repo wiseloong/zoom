@@ -1,10 +1,12 @@
-package com.zoom.security.rest;
+package com.zoom.security.config;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-//@Service
-public class AuthUserServiceImpl implements AuthUserService {
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;

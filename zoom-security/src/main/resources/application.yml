@@ -14,6 +14,9 @@ spring:
   flyway:
     enabled: false
 
+logging:
+  level:
+    root: debug
 
 zoom:
   security:
