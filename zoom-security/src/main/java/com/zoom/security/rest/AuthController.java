@@ -1,5 +1,7 @@
 package com.zoom.security.rest;
 
+import com.zoom.security.annotation.CurrentUser;
+import com.zoom.security.model.Person;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,14 @@ public class AuthController {
      */
     @GetMapping("/user")
     public Principal user(Principal user) {
+        return user;
+    }
+
+    /**
+     * 测试获取用户信息
+     */
+    @GetMapping("/user2")
+    public Person user2(@CurrentUser Person user) {
         return user;
     }
 

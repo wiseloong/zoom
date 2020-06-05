@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -14,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -70,16 +68,16 @@ public class ApiSessionSecurityConfig extends WebSecurityConfigurerAdapter {
 //                			.withUser("admin").password("password").roles("USER", "ADMIN");
 //	  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated().and().formLogin().and().httpBasic().and()
-//                .csrf(csrf -> csrf.disable()).
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                );
-    }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests().anyRequest().authenticated().and().formLogin().and().httpBasic().and()
+////                .csrf(csrf -> csrf.disable()).
+//                .csrf(csrf -> csrf
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                );
+//    }
 
-//    @Bean
+    //    @Bean
     public UserDetailsService users() {
         // 下面配置的2个账号密码是： password
         UserDetails user = User.builder()
