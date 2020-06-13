@@ -29,7 +29,9 @@ public class Person extends BaseEntity implements UserDetails, CredentialsContai
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(o -> new SimpleGrantedAuthority(o.getCode())).collect(Collectors.toSet());
+        return roles.stream()
+                .map(o -> new SimpleGrantedAuthority(o.getCode()))
+                .collect(Collectors.toSet());
     }
 
     @Override

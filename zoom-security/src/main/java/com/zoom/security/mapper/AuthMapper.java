@@ -41,7 +41,7 @@ public interface AuthMapper {
                 SELECT("*");
                 FROM("cm_person");
                 WHERE(SqlUtil.enabled(null),
-                        SqlUtil.equal(null, "code"));
+                        SqlUtil.eq(null, "code"));
                 LIMIT(1);
             }}.toString();
         }
@@ -51,7 +51,7 @@ public interface AuthMapper {
                 SELECT("r.*");
                 FROM("sm_role r", "sr_person_role pr");
                 WHERE("r.id = pr.role_id", SqlUtil.enabled("r"),
-                        SqlUtil.equal("pr", "person_id"));
+                        SqlUtil.eq("pr", "person_id"));
             }}.toString();
         }
 

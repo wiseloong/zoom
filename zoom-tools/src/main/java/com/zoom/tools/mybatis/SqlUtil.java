@@ -33,15 +33,32 @@ public class SqlUtil {
         return "<script>" + sql + "</script>";
     }
 
-    public static String equal(String as, String column) {
+    public static String eq(String column) {
+        return eq(null, column, null);
+    }
+
+    public static String eq(String as, String column) {
+        return eq(as, column, null);
+    }
+
+    /**
+     * @param as     是否有as名称，没有给null。
+     * @param column 数据库字段名称
+     * @param entity 对象名称，当是单一字段时，给null，例如：@Param("e") Entity entity，则需要给 e
+     * @return 数据库语句等于，例如：name = #{name}
+     */
+    public static String eq(String as, String column, String entity) {
         String a = SqlUtil.as(as);
         String property = StrUtil.toCamelCase(column);
+        if (entity != null) {
+            property = entity + "." + property;
+        }
         String sql = a + column + " = #{" + property + "}";
         return space(sql);
     }
 
-    public static String andEqual(String as, String column) {
-        return AND + equal(as, column);
+    public static String andEq(String as, String column) {
+        return AND + eq(as, column);
     }
 
     public static String in(String as, String column) {
