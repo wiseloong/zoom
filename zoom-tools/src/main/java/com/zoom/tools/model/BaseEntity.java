@@ -12,13 +12,11 @@ import java.util.Date;
 @Getter
 @Setter
 public abstract class BaseEntity implements Serializable {
-
     protected Long id;
     protected String code;
     protected String name;
     protected String notes;
     protected Integer version;
-    protected Integer valid;  //是否启用
     protected Integer delete; //是否删除
     protected Long tenantId;  //租户id
 
@@ -36,9 +34,6 @@ public abstract class BaseEntity implements Serializable {
         }
         if (modifyDate == null) {
             this.modifyDate = date;
-        }
-        if (valid == null) {
-            this.valid = 1;
         }
         if (delete == null) {
             this.delete = 0;

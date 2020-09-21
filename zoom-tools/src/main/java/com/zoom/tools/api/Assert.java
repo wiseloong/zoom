@@ -1,5 +1,6 @@
 package com.zoom.tools.api;
 
+import com.zoom.tools.exception.ApiException;
 import org.springframework.lang.Nullable;
 
 /**

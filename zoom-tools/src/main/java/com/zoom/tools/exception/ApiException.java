@@ -1,4 +1,4 @@
-package com.zoom.tools.api;
+package com.zoom.tools.exception;
 
 /**
  * 自定义异常类
